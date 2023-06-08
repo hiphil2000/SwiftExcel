@@ -18,7 +18,7 @@ namespace SwiftExcel.Extensions
 
         public static string GetPropertyValue<TData>(this PropertyInfo propertyInfo, TData entity)
         {
-            return propertyInfo.GetValue(entity)?.ToString();
+            return propertyInfo.GetValue(entity, null)?.ToString();
         }
 
         public static ExcelExportAttribute GetExcelExportAttributeOrDefault(this MemberInfo memberInfo)

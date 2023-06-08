@@ -1,4 +1,5 @@
-﻿using SwiftExcel.Exceptions;
+﻿using System;
+using SwiftExcel.Exceptions;
 using System.Collections.Generic;
 using System.IO;
 
@@ -13,9 +14,30 @@ namespace SwiftExcel
         public bool WrapText { get; set; }
         public IList<double> ColumnsWidth { get; set; }
 
+        private static int idCount = 0;
+        public static int IdCount => idCount;
+        
+        public readonly string Rid;
+        public readonly string Uid;
+
+        public string FileName
+        {
+            get
+            {
+                return Rid + ".xml";
+            }
+        }
+
         internal TextWriter TextWriter { get; set; }
         internal int CurrentCol { get; set; }
         internal int CurrentRow { get; set; }
+
+        public Sheet()
+        {
+            idCount++;
+            Rid = "rId" + idCount;
+            Uid = Guid.NewGuid().ToString();
+        }
 
         internal void Write(string value)
         {

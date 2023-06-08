@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security;
 using System.Text;
 using System.Xml;
@@ -7,31 +8,32 @@ namespace SwiftExcel
 {
     public class ExcelWriter : ExcelWriterCore
     {
-        public ExcelWriter(string filePath, Sheet sheet = null)
-            : base(filePath, sheet)
+        public ExcelWriter(string filePath, IEnumerable<Sheet> sheets = null)
+            : base(filePath, sheets)
         {
         }
 
-        public void Write(string value, int col, int row, DataType dataType = DataType.Text)
+        public void Write(string sheetName, string value, int col, int row, DataType dataType = DataType.Text)
         {
             var data = GetCellData(value, col, row, dataType);
-            Write(col, row, data);
+            Write(sheetName, col, row, data);
         }
 
-        public void WriteFormula(FormulaType type, int col, int row, int sourceCol, int sourceRowStart, int sourceRowEnd)
+        public void WriteFormula(string sheetName, FormulaType type, int col, int row, int sourceCol, int sourceRowStart, int sourceRowEnd)
         {
             var data = GetCellDataFormula(type, col, row, sourceCol, sourceRowStart, sourceRowEnd);
-            Write(col, row, data);
+            Write(sheetName, col, row, data);
         }
 
-        private void Write(int col, int row, string data)
+        private void Write(string sheetName, int col, int row, string data)
         {
-            Sheet.PrepareRow(col, row);
+            var sheet = Sheets[sheetName];
+            sheet.PrepareRow(col, row);
 
-            Sheet.Write(data);
+            sheet.Write(data);
 
-            Sheet.CurrentCol = col;
-            Sheet.CurrentRow = row;
+            sheet.CurrentCol = col;
+            sheet.CurrentRow = row;
         }
 
         private static string GetCellData(string value, int col, int row, DataType dataType)

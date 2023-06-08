@@ -17,7 +17,7 @@ namespace SwiftExcel.Extensions
         {
             var properties = typeof(TData).GetProperties().Order();
 
-            using (var excelWriter = new ExcelWriter(filePath, properties.CreateSheet(sheetName)))
+            using (var excelWriter = new ExcelWriter(filePath, new [] {properties.CreateSheet(sheetName)}))
             {
                 excelWriter
                     .CreateHeader(properties)
@@ -45,7 +45,8 @@ namespace SwiftExcel.Extensions
             for (var i = 0; i < properties.Count; i++)
             {
                 var columnNumber = i + SkipZeroIndexStep;
-                excelWriter.Write(properties[i].GetExportNameOrDefault() ?? properties[i].Name, columnNumber, HeaderRowNumber);
+                // TODO: Recover with sheet name logic
+                // excelWriter.Write(properties[i].GetExportNameOrDefault() ?? properties[i].Name, columnNumber, HeaderRowNumber);
             }
 
             return excelWriter;
@@ -60,11 +61,12 @@ namespace SwiftExcel.Extensions
                     var columnNumber = j + SkipZeroIndexStep;
                     var rowNumber = i + SkipZeroIndexStep + HeaderRowNumber;
 
-                    excelWriter.Write(
-                        properties[j].GetPropertyValue(entities[i]),
-                        columnNumber,
-                        rowNumber,
-                        properties[j].PropertyType.GetExcelType());
+                    // TODO: Recover with sheet name logic
+                    // excelWriter.Write(
+                    //     properties[j].GetPropertyValue(entities[i]),
+                    //     columnNumber,
+                    //     rowNumber,
+                    //     properties[j].PropertyType.GetExcelType());
                 }
             }
 
